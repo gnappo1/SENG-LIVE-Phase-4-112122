@@ -12,7 +12,7 @@ function Navigation({updateUser}) {
     })
     .then(res =>{
       if(res.ok){
-        updateUser(false)
+        updateUser(null)
       }
     })
   }

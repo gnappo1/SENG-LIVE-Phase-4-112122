@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {useHistory} from 'react-router-dom'
 import {Form} from '../styled/Form'
+import { UserContext } from '../context/userContext'
 
 function Login({updateUser}) {
     const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ function Login({updateUser}) {
     })
     const [errors, setErrors] = useState([])
     const history = useHistory()
+    const {setUser} = useContext(UserContext)
 
     const {name, password} = formData
 
@@ -28,7 +30,7 @@ function Login({updateUser}) {
         .then(res => {
             if(res.ok){
                 res.json().then(user => {
-                    updateUser(user)
+                    setUser(user)
                     history.push(`/users/${user.id}`)
                 })
             }else {
