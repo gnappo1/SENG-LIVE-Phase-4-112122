@@ -20,20 +20,20 @@ function App() {
 
 
   useEffect(() => {
+    const fetchProductions = () => {
+      fetch('/productions')
+      .then(res => {
+        if(res.ok){
+          res.json().then(setProductions)
+        }else {
+          res.json().then(data => setErrors(data.error))
+        }
+      })
+    }
     fetchCurrentUser()
     .then(fetchProductions)
   },[])
 
-  const fetchProductions = () => {
-    fetch('/productions')
-    .then(res => {
-      if(res.ok){
-        res.json().then(setProductions)
-      }else {
-        res.json().then(data => setErrors(data.error))
-      }
-    })
-  }
 
   const addProduction = (production) => setProductions(current => [...current,production])
 
