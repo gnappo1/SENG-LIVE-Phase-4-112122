@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import {Provider} from "react-redux"
 import App from './App';
 import { BrowserRouter as Router } from "react-router-dom";
-import { UserProvider } from './context/userContext';
+// import { UserProvider } from './context/userContext';
+import { store } from './app/store';
 
 ReactDOM.render(
-  <UserProvider>
+  <Provider store={store}>
     <Router>
       <App />
     </Router>
-    </UserProvider>,
+    </Provider>,
   document.getElementById('root')
 );

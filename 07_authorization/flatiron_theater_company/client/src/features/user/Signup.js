@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import {Form} from '../styled/Form'
+import {Form} from '../../styled/Form'
 
 function SignUp({updateUser}) {
     const [formData, setFormData] = useState({

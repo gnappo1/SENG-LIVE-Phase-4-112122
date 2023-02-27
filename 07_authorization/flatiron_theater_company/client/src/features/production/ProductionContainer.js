@@ -1,14 +1,16 @@
 import styled from 'styled-components'
 import ProductionCard from './ProductionCard'
+import { useSelector } from 'react-redux'
+import { productionSelector } from "./productionSlice"
 
-
-function ProductionContainer({productions}) {
+function ProductionContainer() {
+  const productions = useSelector((state) => state.production.all)
 
     return (
      <div>
          <Title><span>F</span>latIron Theater <span>C</span>ompany</Title>
          <CardContainer>
-             {productions.map(production => <ProductionCard  key={production.id} production={production}  />)}
+             {productions?.map(production => <ProductionCard  key={production.id} production={production}  />)}
          </CardContainer>
      </div>
     );

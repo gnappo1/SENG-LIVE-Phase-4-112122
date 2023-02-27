@@ -1,11 +1,14 @@
 import  { Link, useParams, useHistory } from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import styled from 'styled-components'
+import { destroyProductionAsync } from './productionSlice'
+import { useDispatch } from 'react-redux'
 
 function ProductionDetail({deleteProduction}) {
   const [production, setProduction] = useState({})
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState(false)
+  const dispatch = useDispatch()
   
   const params = useParams()
   const history = useHistory()
@@ -25,20 +28,9 @@ function ProductionDetail({deleteProduction}) {
     })
   },[])
 
-  function handleDelete(){
-    //DELETE to `/productions/${params.id}`
-    fetch(`/productions/${params.id}`,{
-      method:'DELETE',
-      headers: {'Content-Type': 'application/json'}
-    })
-    .then(res => {
-      if(res.ok){
-        deleteProduction(id)
-        history.push('/')
-      } else {
-        res.json().then(data => setErrors(Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)))
-      }
-    })
+  const handleDelete = () => { 
+    dispatch(destroyProductionAsync(production.id))
+    history.push("/")
   }
 
   const handleBuy = () => {

@@ -1,13 +1,14 @@
 import styled from 'styled-components'
-import ProductionContainer from './ProductionContainer'
+import ProductionContainer from '../features/production/ProductionContainer'
 
-function Home({productions}){
-    return(
+function Home(){
+
+  return(
     <div>
         <Image /> 
-        <ProductionContainer productions={productions} />
+        <ProductionContainer />
     </div>
-    )
+  )
 }
 
 export default Home

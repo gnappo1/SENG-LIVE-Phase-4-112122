@@ -1,55 +1,45 @@
 import { Route, Switch } from 'react-router-dom'
 import {createGlobalStyle} from 'styled-components'
 import {useEffect, useState, useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Home from './components/Home'
-import ProductionForm from './components/ProductionForm'
-import EditProductionForm from './components/EditProductionForm'
+import ProductionForm from './features/production/ProductionForm'
+import EditProductionForm from './features/production/EditProductionForm'
 import Navigation from './components/Navigation'
-import ProductionDetail from './components/ProductionDetail'
-import UserPage from './components/UserPage'
-import SignUp from './components/Signup'
-import Login from './components/Login'
+import ProductionDetail from './features/production//ProductionDetail'
+import UserPage from './features/user/UserPage'
+import SignUp from './features/user/Signup'
+import Login from './features/user/Login'
 import NotFound from './components/NotFound'
 import { UserContext } from './context/userContext'
+import {getCurrentUser} from "./features/user/userSlice"
+import { getProductionsAsync, productionSelector } from './features/production/productionSlice'
 
 function App() {
-  const [productions, setProductions] = useState([])
-  const [errors, setErrors] = useState(false)
+  // const [productions, setProductions] = useState([])
+  // const [errors, setErrors] = useState(false)
   // const [currentUser, setCurrentUser] = useState(false)
-  const {fetchCurrentUser, user, setUser} = useContext(UserContext)
-
+  // const {fetchCurrentUser, user, setUser} = useContext(UserContext)
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user.user)
 
   useEffect(() => {
-    const fetchProductions = () => {
-      fetch('/productions')
-      .then(res => {
-        if(res.ok){
-          res.json().then(setProductions)
-        }else {
-          res.json().then(data => setErrors(data.error))
-        }
-      })
-    }
-    fetchCurrentUser()
-    .then(fetchProductions)
-  },[])
+    // const fetchProductions = () => {
+    //   fetch('/productions')
+    //   .then(res => {
+    //     if(res.ok){
+    //       res.json().then(setProductions)
+    //     }else {
+    //       res.json().then(data => setErrors(data.error))
+    //     }
+    //   })
+    // }
+    dispatch(getCurrentUser())
+    .then(() => dispatch(getProductionsAsync()))
+  },[dispatch])
 
 
-  const addProduction = (production) => setProductions(current => [...current,production])
-
-  const updateProduction = (updatedProduction) => setProductions(current => {
-    return current.map(production => {
-     if(production.id === updatedProduction.id){
-       return updatedProduction
-     } else {
-       return production
-     }
-    })
-  })
-
-  const deleteProduction = (id) => setProductions(current => current.filter(p => p.id !== id)) 
-
-  const updateUser = (user) => setUser(user)
+  // const updateUser = (user) => setUser(user)
   
   // if(!user) return (
   //   <>
@@ -63,20 +53,20 @@ function App() {
   return (
     <>
     <GlobalStyle />
-    <Navigation updateUser={updateUser}/>
-    { !user? <Login error={'please login'} updateUser={updateUser} /> :
+    <Navigation />
+    { !user? <Login error={'please login'} /> :
       <Switch>
 
       <Route  path='/productions/new'>
-        <ProductionForm addProduction={addProduction}/>
+        <ProductionForm />
       </Route>
     {/* TODO make edit component */}
       <Route  path='/productions/:id/edit'>
-        <EditProductionForm updateProduction={updateProduction}/>
+        <EditProductionForm />
       </Route>
      
       <Route path='/productions/:id'>
-          <ProductionDetail deleteProduction={deleteProduction}/>
+          <ProductionDetail />
       </Route>
 
       <Route path='/users/new'>
@@ -84,16 +74,16 @@ function App() {
       </Route>
 
       <Route path='/users/:id'>
-        <UserPage updateUser={updateUser}/>
+        <UserPage />
       </Route>
 
       <Route path='/login'>
-        <Login updateUser={updateUser}/>
+        <Login />
       </Route>
 
     
       <Route exact path='/'>
-        <Home  productions={productions}/>
+        <Home />
       </Route>
 
       <Route>
